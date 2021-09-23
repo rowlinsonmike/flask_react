@@ -1,0 +1,20 @@
+{
+  "name": "react-flask-auth",
+  "version": "1.0.0",
+  "description": "### Production Mode",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm i && concurrently \"pip3 install -r requirements.txt\" \"cd client && npm i\"",
+    "bootstrap": "export BOOTSTRAP=BUILD && python3 bootstrap.py",
+    "teardown": "python3 bootstrap.py",
+    "dev": "concurrently \"flask run\" \"cd client && npm run start\"",
+    "build": "cd client && npm run build",
+    "deploy": "gunicorn run:app"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^6.2.1"
+  }
+}
