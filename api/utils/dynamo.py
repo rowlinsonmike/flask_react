@@ -3,7 +3,6 @@ from boto3.dynamodb.conditions import Key
 from boto3.dynamodb.types import TypeDeserializer
 deserializer = TypeDeserializer()
 from os import environ
-
 # https://www.trek10.com/blog/dynamodb-single-table-relational-modeling/
 
 
@@ -64,9 +63,18 @@ class DynamoTable(object):
         self.resource = boto3.resource('dynamodb',region_name=app.config.get("AWS_REGION")).Table(self._table)
         ...
     def create_table(self):
-        self.client.create_table(TableName=self._table,**TABLE_TEMPLATE)
+        if not self.table_exists():
+            self.client.create_table(TableName=self._table,**TABLE_TEMPLATE)
     def delete_table(self):
-        self.client.delete_table(TableName=self._table)
+        if self.table_exists():
+            self.client.delete_table(TableName=self._table)
+    def table_exists(self):
+        try:
+            self.client.describe_table(TableName=self._table)
+            return True
+        except:
+            return False
+
     def load(self,key,**kwargs):
         elements = key.split(":")
         if len(elements) < 3:

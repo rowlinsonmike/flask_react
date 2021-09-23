@@ -3,6 +3,7 @@ from api.utils import dynamo
 from dotenv import load_dotenv
 import os 
 import bcrypt
+from time import sleep
 
 
 #load env variables from .env
@@ -22,6 +23,10 @@ with app.app_context():
     if os.getenv("BOOTSTRAP","TEARDOWN") == "BUILD":
         # create dynamo table
         app.extensions["dynamo"].table.create_table()
+        while True:
+            if app.extensions["dynamo"].table.table_exists():
+                break
+            sleep(10)
         # create default admin
         password = bytes("supersecret",'utf-8')
         # hash default password
