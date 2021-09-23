@@ -9,7 +9,7 @@ function App() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username: "test", password: "test" }),
+      body: JSON.stringify({ username: "admin", password: "supersecret" }),
     });
   };
   const mock = async () => {
