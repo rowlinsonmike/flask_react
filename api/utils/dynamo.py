@@ -59,7 +59,7 @@ TABLE_TEMPLATE = {
 
 class DynamoTable(object):
     def __init__(self,app):
-        self.client = boto3.client('dynamodb',region_name="us-east-1")
+        self.client = boto3.client('dynamodb',region_name=app.config.get("AWS_REGION"))
         self._table = app.config.get("DYNAMO_USER_TABLE")
         self.resource = boto3.resource('dynamodb',region_name=app.config.get("AWS_REGION")).Table(self._table)
         ...
@@ -138,78 +138,6 @@ class Dynamo(object):
         app.config.setdefault('AWS_REGION', app.config.get("AWS_REGION",'us-east-1'))
 
 
-# class DynamoST:
-#     client = None
-#     table = None
-#     def __init__(self,Table):
-#         ...
-        # self.client = boto3.client('dynamodb',endpoint_url='http://localhost:8000')
-        # self.client = boto3.client('dynamodb',region_name="us-east-1")
-        # self.table = Table
-        # if not self.tableExists():
-        #     self.createTable()
-        # self.client = boto3.resource('dynamodb',endpoint_url='http://localhost:8000')
-        # self.client = boto3.resource('dynamodb',region_name="us-east-1")
-    # def tableExists(self,):
-    #     try:
-    #         self.client.describe_table(TableName=self.table)
-    #         return True
-    #     except self.client.exceptions.ResourceNotFoundException:
-    #         return False
-    # def createTable(self,):
-    #     self.client.create_table(TableName=self.table,**TABLE_TEMPLATE)
-    # def load(self,key,**kwargs):
-    #     table = self.client.Table('EC2NOX')      
-    #     elements = key.split(":")
-    #     if len(elements) < 3:
-    #         pk,sk = key.split(":")
-    #         resp = table.put_item(
-    #             Item={
-    #                 'pk':pk,
-    #                 'sk': sk,
-    #                 **kwargs
-    #             }
-    #         )
-    #     else:
-    #         pk,sk,data = elements
-    #         resp = table.put_item(
-    #             Item={
-    #                 'pk':pk,
-    #                 'sk': sk,
-    #                 'data':data,
-    #                 **kwargs
-    #             }
-    #         )
-    #     return True
-    # def delete(self,key):
-    #     try:
-    #         table = self.client.Table('EC2NOX')  
-    #         pk,sk = key.split(":")
-    #         resp = table.delete_item(Key={'pk': pk, 'sk': sk})
-    #         return True
-    #     except Exception as e: 
-    #         print(e)
-    #         return False
-    # def query(self,key):
-    #     table = self.client.Table('EC2NOX')  
-    #     #gsi_1 index
-    #     if key[0] == ":":
-    #         elements = key.split(":")
-    #         if len(elements) == 2:
-    #             #no data key
-    #             resp = table.query(IndexName='gsi_1',KeyConditionExpression=Key('sk').eq(elements[1]))
-    #         else:
-    #             resp = table.query(IndexName='gsi_1',KeyConditionExpression=Key('sk').eq(elements[1]) & Key('data').eq(elements[2]))
-    #     #primary index
-    #     else:
-    #         elements = key.split(":")
-    #         if len(elements) == 1:
-    #             #no data key
-    #             resp = table.query(KeyConditionExpression=Key('pk').eq(elements[0]))
-    #         else:
-    #             resp = table.query(KeyConditionExpression=Key('pk').eq(elements[0]) & Key('sk').eq(elements[1]))
-        
-    #     return resp['Items']
 
 # conn = DynamoST(Table="Testing")
 
